@@ -8,17 +8,21 @@ const formData = {
 const inputEmailElem = formElem.querySelector("[name='email']");
 const inputMessageElem = formElem.querySelector("[name='message']");
 
-const localFeedback = localStorage.getItem(feedbackFormKey);
-if (!localFeedback) {
-  return;
+init();
+
+function init() {
+  const localFeedback = localStorage.getItem(feedbackFormKey);
+  if (!localFeedback) {
+    return;
+  }
+  const feedbackObj = JSON.parse(localFeedback);
+
+  formData.email = feedbackObj.email || '';
+  formData.message = feedbackObj.message || '';
+
+  inputEmailElem.value = formData.email;
+  inputMessageElem.value = formData.message;
 }
-const feedbackObj = JSON.parse(localFeedback);
-
-formData.email = feedbackObj.email || '';
-formData.message = feedbackObj.message || '';
-
-inputEmailElem.value = formData.email;
-inputMessageElem.value = formData.message;
 
 formElem.addEventListener('submit', e => {
   e.preventDefault();
