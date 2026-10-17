@@ -1,6 +1,10 @@
 const feedbackFormKey = 'feedback-form-state';
 const formElem = document.querySelector('.feedback-form');
-let formData = new FormData(formElem);
+const formData = {
+  email: '',
+  message: '',
+};
+
 const inputEmailElem = formElem.querySelector("[name='email']");
 const inputMessageElem = formElem.querySelector("[name='message']");
 
@@ -11,38 +15,31 @@ document.addEventListener('DOMContentLoaded', e => {
   }
   const feedbackObj = JSON.parse(localFeedback);
 
-  inputEmailElem.value = feedbackObj.email || '';
-  inputMessageElem.value = feedbackObj.message || '';
+  formData.email = feedbackObj.email || '';
+  formData.message = feedbackObj.message || '';
+
+  inputEmailElem.value = formData.email;
+  inputMessageElem.value = formData.message;
 });
 
 formElem.addEventListener('submit', e => {
   e.preventDefault();
-  formData = new FormData(e.currentTarget);
 
-  const formFields = {
-    email: formData.get('email'),
-    message: formData.get('message'),
-  };
-
-  if (!formFields.email || !formFields.message) {
+  if (!formData.email || !formData.message) {
     alert('Fill please all fields');
   } else {
-    console.log(formFields);
+    console.log(formData);
 
     localStorage.removeItem(feedbackFormKey);
     e.currentTarget.reset();
-
-    formData = new FormData(e.currentTarget);
   }
 });
 
 formElem.addEventListener('input', e => {
-  formData = new FormData(e.currentTarget);
+  const formClass = new FormData(e.currentTarget);
 
-  const formFields = {
-    email: formData.get('email'),
-    message: formData.get('message'),
-  };
+  formData.email = formClass.get('email');
+  formData.message = formClass.get('message');
 
-  localStorage.setItem(feedbackFormKey, JSON.stringify(formFields));
+  localStorage.setItem(feedbackFormKey, JSON.stringify(formData));
 });
